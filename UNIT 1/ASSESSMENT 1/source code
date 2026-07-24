@@ -1,0 +1,181 @@
+# ==========================================
+# Question 1: Water Jug Problem (BFS)
+# ==========================================
+
+from collections import deque
+
+def water_jug(cap1, cap2, target):
+    visited = set()
+    queue = deque([((0, 0), [])])
+
+    while queue:
+        (a, b), path = queue.popleft()
+
+        if (a, b) in visited:
+            continue
+
+        visited.add((a, b))
+        path = path + [(a, b)]
+
+        if a == target or b == target:
+            return path
+
+        states = [
+            (cap1, b),          # Fill jug 1
+            (a, cap2),          # Fill jug 2
+            (0, b),             # Empty jug 1
+            (a, 0),             # Empty jug 2
+            (min(cap1, a+b), b-(min(cap1, a+b)-a)), # Pour 2 to 1
+            (a-(min(cap2, a+b)-b), min(cap2, a+b))  # Pour 1 to 2
+        ]
+
+        for state in states:
+            if state not in visited:
+                queue.append((state, path))
+
+    return None
+
+solution = water_jug(4, 3, 2)
+
+print("Question 1: Water Jug Problem")
+print("Steps:")
+for step in solution:
+    print(step)
+
+
+# ==========================================
+# Question 2: Mars Rover Intelligence Agent
+# ==========================================
+
+class MarsRoverAgent:
+
+    def __init__(self):
+        self.location = "Mars Surface"
+
+    def sense_environment(self):
+        return "Rock detected"
+
+    def make_decision(self, observation):
+        if observation == "Rock detected":
+            return "Move left to avoid obstacle"
+        else:
+            return "Move forward"
+
+    def act(self, action):
+        print(action)
+
+print("\nQuestion 2: Mars Rover Intelligence Agent")
+
+rover = MarsRoverAgent()
+
+observation = rover.sense_environment()
+print("Environment:", observation)
+
+action = rover.make_decision(observation)
+rover.act(action)
+
+
+# ==========================================
+# Question 3: Eight Queens Problem
+# ==========================================
+
+N = 8
+board = [-1] * N
+
+def safe(row, col):
+    for i in range(row):
+        if board[i] == col or abs(board[i]-col) == abs(i-row):
+            return False
+    return True
+
+def solve(row):
+    if row == N:
+        return True
+
+    for col in range(N):
+        if safe(row, col):
+            board[row] = col
+
+            if solve(row+1):
+                return True
+
+    return False
+
+print("\nQuestion 3: Eight Queens Problem")
+
+solve(0)
+
+for i in range(N):
+    line = ""
+    for j in range(N):
+        if board[i] == j:
+            line += "Q "
+        else:
+            line += ". "
+    print(line)
+
+
+# ==========================================
+# Question 4: OLA Cab Booking Agent
+# ==========================================
+
+class OlaAgent:
+
+    def book_cab(self, user_location, cabs):
+
+        nearest = min(cabs, key=cabs.get)
+
+        print("User Location:", user_location)
+        print("Available Cabs:", cabs)
+        print("Cab Assigned:", nearest)
+
+print("\nQuestion 4: OLA Cab Booking Agent")
+
+user = "Chennai"
+
+cabs = {
+    "Cab 1": 5,
+    "Cab 2": 2,
+    "Cab 3": 8
+}
+
+agent = OlaAgent()
+agent.book_cab(user, cabs)
+
+
+# ==========================================
+# Question 5: Uniform Cost Search (UCS)
+# ==========================================
+
+import heapq
+
+graph = {
+    'S': [('A',1), ('G',12)],
+    'A': [('B',3), ('C',1)],
+    'B': [('D',3)],
+    'C': [('D',1), ('G',2)],
+    'D': [('G',3)]
+}
+
+def UCS(start, goal):
+
+    queue = [(0, start, [start])]
+
+    while queue:
+        cost, node, path = heapq.heappop(queue)
+
+        if node == goal:
+            return cost, path
+
+        for next_node, weight in graph.get(node, []):
+            heapq.heappush(queue,
+                           (cost + weight,
+                            next_node,
+                            path + [next_node]))
+
+print("\nQuestion 5: Uniform Cost Search")
+
+cost, path = UCS('S', 'G')
+
+print("Optimal Path:", path)
+print("Total Cost:", cost)
