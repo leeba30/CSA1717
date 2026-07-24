@@ -1,0 +1,25 @@
+class MarsRoverAgent:
+
+    def __init__(self):
+        self.location = "Mars Surface"
+
+    def sense_environment(self):
+        return "Rock detected"
+
+    def make_decision(self, observation):
+        if observation == "Rock detected":
+            return "Move left to avoid obstacle"
+        else:
+            return "Move forward"
+
+    def act(self, action):
+        print(action)
+
+
+rover = MarsRoverAgent()
+
+observation = rover.sense_environment()
+print("Environment:", observation)
+
+action = rover.make_decision(observation)
+rover.act(action)
