@@ -1,0 +1,240 @@
+# Hospital Doctor Scheduling using Backtracking
+
+doctors = ["D1", "D2", "D3"]
+shifts = ["Morning", "Afternoon", "Night"]
+
+assignment = {}
+
+
+# Check constraints
+def is_valid(doctor, shift):
+
+    # D1 cannot work Night
+    if doctor == "D1" and shift == "Night":
+        return False
+
+    # D3 cannot work Morning
+    if doctor == "D3" and shift == "Morning":
+        return False
+
+    # D2 must work before D3
+    if doctor == "D3" and "D2" in assignment:
+        order = {"Morning": 1, "Afternoon": 2, "Night": 3}
+        if order[assignment["D2"]] >= order[shift]:
+            return False
+
+    return True
+
+
+# Backtracking function
+def backtracking(index):
+
+    if index == len(doctors):
+        return True
+
+    doctor = doctors[index]
+
+    for shift in shifts:
+
+        if shift not in assignment.values():
+
+            if is_valid(doctor, shift):
+
+                assignment[doctor] = shift
+
+                if backtracking(index + 1):
+                    return True
+
+                del assignment[doctor]
+
+    return False
+
+
+# Start Scheduling
+if backtracking(0):
+
+    print("Final Valid Schedule:")
+    for doctor, shift in assignment.items():
+        print(doctor, "->", shift)
+
+else:
+    print("No valid schedule found")
+
+
+
+# ---------------------------------------------------------
+
+
+# Robot Path Finding using BFS
+
+from collections import deque
+
+grid = [
+    ['S', '.', '.', 'X', '.'],
+    ['.', 'X', '.', 'X', '.'],
+    ['.', 'X', '.', '.', '.'],
+    ['.', '.', 'X', 'X', '.'],
+    ['X', '.', '.', '.', 'G']
+]
+
+
+# Find Start and Goal
+for i in range(5):
+    for j in range(5):
+        if grid[i][j] == 'S':
+            start = (i, j)
+        if grid[i][j] == 'G':
+            goal = (i, j)
+
+
+# Possible movements
+moves = [
+    (-1, 0),
+    (1, 0),
+    (0, -1),
+    (0, 1)
+]
+
+
+# BFS Algorithm
+def bfs(start, goal):
+
+    queue = deque([(start, [start])])
+    visited = set()
+    visited.add(start)
+
+    while queue:
+
+        current, path = queue.popleft()
+
+        if current == goal:
+            return path
+
+        for move in moves:
+
+            x = current[0] + move[0]
+            y = current[1] + move[1]
+
+            if (0 <= x < 5 and
+                0 <= y < 5 and
+                grid[x][y] != 'X' and
+                (x, y) not in visited):
+
+                visited.add((x, y))
+                queue.append(((x, y), path + [(x, y)]))
+
+    return None
+
+
+path = bfs(start, goal)
+
+print("\nOptimal Path:")
+print(path)
+
+print("Path Cost:", len(path)-1)
+
+
+
+# ---------------------------------------------------------
+
+
+# Autonomous Rescue Robot using Uniform Cost Search (UCS)
+
+import heapq
+
+grid = [
+    ['S', '.', '.', 'X', '.'],
+    ['.', 'X', 'R', 'X', '.'],
+    ['.', '.', '.', '.', '.'],
+    ['X', 'R', 'X', '.', '.'],
+    ['.', '.', '.', '.', 'G']
+]
+
+
+rows = len(grid)
+cols = len(grid[0])
+
+
+# Find Start and Goal
+for i in range(rows):
+    for j in range(cols):
+
+        if grid[i][j] == 'S':
+            start = (i, j)
+
+        if grid[i][j] == 'G':
+            goal = (i, j)
+
+
+# Movement directions
+moves = [
+    (-1, 0),
+    (1, 0),
+    (0, -1),
+    (0, 1)
+]
+
+
+# Cost Calculation
+def move_cost(x, y):
+
+    if grid[x][y] == 'R':
+        return 3
+
+    return 1
+
+
+# Uniform Cost Search
+def UCS(start, goal):
+
+    priority_queue = [(0, start, [start])]
+    visited = set()
+
+
+    while priority_queue:
+
+        cost, current, path = heapq.heappop(priority_queue)
+
+
+        if current == goal:
+            return path, cost
+
+
+        if current in visited:
+            continue
+
+
+        visited.add(current)
+
+
+        for move in moves:
+
+            x = current[0] + move[0]
+            y = current[1] + move[1]
+
+
+            if (0 <= x < rows and
+                0 <= y < cols and
+                grid[x][y] != 'X' and
+                (x, y) not in visited):
+
+
+                new_cost = cost + move_cost(x, y)
+
+
+                heapq.heappush(
+                    priority_queue,
+                    (new_cost, (x, y), path + [(x, y)])
+                )
+
+
+    return None, None
+
+
+path, cost = UCS(start, goal)
+
+
+print("\nSafe Optimal Path:")
+print(path)
+
+print("Total Cost:", cost)
