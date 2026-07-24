@@ -1,0 +1,21 @@
+class OlaAgent:
+
+    def book_cab(self, user_location, cabs):
+
+        nearest = min(cabs, key=cabs.get)
+
+        print("User Location:", user_location)
+        print("Available Cabs:", cabs)
+        print("Cab Assigned:", nearest)
+
+
+user = "Chennai"
+
+cabs = {
+    "Cab 1": 5,
+    "Cab 2": 2,
+    "Cab 3": 8
+}
+
+agent = OlaAgent()
+agent.book_cab(user, cabs)
