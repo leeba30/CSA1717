@@ -1,0 +1,318 @@
+# ==========================================================
+# QUESTION 1 : WATER JUG PROBLEM USING BFS
+# ==========================================================
+
+from collections import deque
+
+def water_jug_bfs(jug1, jug2, target):
+
+    start = (0, 0)
+
+    queue = deque()
+    queue.append((start, [start]))
+
+    visited = set()
+
+    while queue:
+
+        current_state, path = queue.popleft()
+
+        if current_state in visited:
+            continue
+
+        visited.add(current_state)
+
+        x = current_state[0]
+        y = current_state[1]
+
+        if x == target or y == target:
+            return path
+
+        next_states = [
+            (jug1, y),
+            (x, jug2),
+            (0, y),
+            (x, 0)
+        ]
+
+        transfer = min(x, jug2 - y)
+        next_states.append((x - transfer, y + transfer))
+
+        transfer = min(y, jug1 - x)
+        next_states.append((x + transfer, y - transfer))
+
+        for state in next_states:
+            if state not in visited:
+                queue.append((state, path + [state]))
+
+    return None
+
+
+solution = water_jug_bfs(4, 3, 2)
+
+for step in solution:
+    print(step)
+
+
+
+# ==========================================================
+# QUESTION 2 : MARS ROVER INTELLIGENCE AGENT
+# ==========================================================
+
+class MarsRover:
+
+    def __init__(self):
+
+        self.position = [0, 0]
+        self.goal = [4, 4]
+        self.obstacles = [(1, 2), (2, 2), (3, 1)]
+
+
+    def sense_environment(self):
+
+        if tuple(self.position) in self.obstacles:
+            return "Obstacle"
+
+        elif self.position == self.goal:
+            return "Goal"
+
+        else:
+            return "Clear"
+
+
+    def take_action(self, status):
+
+        if status == "Obstacle":
+            self.position[1] += 1
+
+        elif status == "Clear":
+
+            if self.position[0] < self.goal[0]:
+                self.position[0] += 1
+
+            elif self.position[1] < self.goal[1]:
+                self.position[1] += 1
+
+
+    def start(self):
+
+        while self.position != self.goal:
+
+            status = self.sense_environment()
+
+            if status == "Goal":
+                break
+
+            self.take_action(status)
+
+        print("Final Position:", self.position)
+
+
+rover = MarsRover()
+rover.start()
+
+
+
+# ==========================================================
+# QUESTION 3 : EIGHT QUEENS PROBLEM USING BACKTRACKING
+# ==========================================================
+
+N = 8
+
+board = [[0 for i in range(N)] for j in range(N)]
+
+
+def print_board():
+
+    for i in range(N):
+
+        for j in range(N):
+
+            if board[i][j] == 1:
+                print("Q", end=" ")
+
+            else:
+                print(".", end=" ")
+
+        print()
+
+
+
+def is_safe(row, col):
+
+    for i in range(col):
+
+        if board[row][i] == 1:
+            return False
+
+
+    i = row
+    j = col
+
+    while i >= 0 and j >= 0:
+
+        if board[i][j] == 1:
+            return False
+
+        i -= 1
+        j -= 1
+
+
+    i = row
+    j = col
+
+    while i < N and j >= 0:
+
+        if board[i][j] == 1:
+            return False
+
+        i += 1
+        j -= 1
+
+
+    return True
+
+
+
+def solve_queens(col):
+
+    if col >= N:
+        return True
+
+
+    for row in range(N):
+
+        if is_safe(row, col):
+
+            board[row][col] = 1
+
+            if solve_queens(col + 1):
+                return True
+
+            board[row][col] = 0
+
+
+    return False
+
+
+
+if solve_queens(0):
+    print_board()
+
+
+
+# ==========================================================
+# QUESTION 4 : OLA CAB BOOKING AGENT
+# ==========================================================
+
+class OlaCabAgent:
+
+    def __init__(self):
+
+        self.cabs = {
+            "Cab101": 3,
+            "Cab102": 5,
+            "Cab103": 2,
+            "Cab104": 7
+        }
+
+        self.rate = 15
+
+
+    def find_nearest_cab(self):
+
+        cab = min(self.cabs, key=self.cabs.get)
+
+        return cab, self.cabs[cab]
+
+
+    def calculate_fare(self, distance):
+
+        return distance * self.rate
+
+
+    def book_cab(self):
+
+        cab, distance = self.find_nearest_cab()
+
+        trip = float(input("Enter Trip Distance: "))
+
+        fare = self.calculate_fare(trip)
+
+        print("Cab:", cab)
+        print("Fare:", fare)
+
+
+agent = OlaCabAgent()
+agent.book_cab()
+
+
+
+# ==========================================================
+# QUESTION 5 : UNIFORM COST SEARCH
+# ==========================================================
+
+import heapq
+
+
+graph = {
+
+    'S': [('A',1),('G',12)],
+    'A': [('B',3),('C',1)],
+    'B': [('D',3)],
+    'C': [('D',1),('G',2)],
+    'D': [('G',3)],
+    'G': []
+
+}
+
+
+
+def uniform_cost_search(start, goal):
+
+    queue = []
+
+    heapq.heappush(queue, (0, start, [start]))
+
+    visited = set()
+
+
+    while queue:
+
+        cost, node, path = heapq.heappop(queue)
+
+
+        if node in visited:
+            continue
+
+
+        visited.add(node)
+
+
+        if node == goal:
+
+            return cost, path
+
+
+        for next_node, weight in graph[node]:
+
+            if next_node not in visited:
+
+                heapq.heappush(
+
+                    queue,
+
+                    (cost + weight,
+                     next_node,
+                     path + [next_node])
+
+                )
+
+
+    return None
+
+
+
+result = uniform_cost_search('S', 'G')
+
+print(result)
