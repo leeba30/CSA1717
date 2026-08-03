@@ -16,16 +16,16 @@ Python 3.13
 Python IDLE
 
 **AI Techniques / Algorithms Used**
-Greedy Best-First Search (GBFS)
-A* Search Algorithm
-Hill Climbing Algorithm
-Online Search Agent
-Constraint Satisfaction Problem (CSP)
-Backtracking Search
-Forward Checking
-Minimax Algorithm
-Alpha-Beta Pruning
-Heuristic Search
+Greedy Best-First Search (GBFS),
+A* Search Algorithm,
+Hill Climbing Algorithm,
+Online Search Agent,
+Constraint Satisfaction Problem (CSP),
+Backtracking Search,
+Forward Checking,
+Minimax Algorithm,
+Alpha-Beta Pruning,
+Heuristic Search,
 
 **Problems Implemented**
 AI-Powered Drone Emergency Medicine Delivery using Greedy Best-First Search and A* Search
