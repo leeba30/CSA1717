@@ -1,0 +1,115 @@
+import heapq
+
+print("========================================")
+print("QUESTION 1 : AI-Powered Drone Delivery (A* Search)")
+print("========================================")
+
+graph = {
+    'S': [('A', 2), ('B', 5)],
+    'A': [('C', 2), ('D', 4)],
+    'B': [('D', 1)],
+    'C': [('G', 5)],
+    'D': [('G', 2)],
+    'G': []
+}
+
+heuristic = {
+    'S': 7,
+    'A': 5,
+    'B': 3,
+    'C': 4,
+    'D': 2,
+    'G': 0
+}
+
+def astar(start, goal):
+    pq = [(heuristic[start], 0, start, [start])]
+    visited = set()
+
+    while pq:
+        f, g, node, path = heapq.heappop(pq)
+
+        if node == goal:
+            return path, g
+
+        if node in visited:
+            continue
+
+        visited.add(node)
+
+        for next_node, cost in graph[node]:
+            new_g = g + cost
+            new_f = new_g + heuristic[next_node]
+            heapq.heappush(pq, (new_f, new_g, next_node, path + [next_node]))
+
+path, cost = astar('S', 'G')
+print("Path:", " -> ".join(path))
+print("Cost:", cost)
+
+
+print("\n========================================")
+print("QUESTION 2 : Smart Traffic Signal Optimization (Hill Climbing)")
+print("========================================")
+
+traffic = [90, 70, 50, 30, 20]
+
+current = traffic[0]
+
+for value in traffic:
+    if value < current:
+        current = value
+
+print("Minimum Traffic Congestion:", current)
+
+
+print("\n========================================")
+print("QUESTION 3 : Mars Rover (Online Search)")
+print("========================================")
+
+environment = ["Safe", "Rock", "Safe", "Crater", "Goal"]
+
+for place in environment:
+    print("Current Position:", place)
+
+    if place == "Rock":
+        print("Obstacle detected - Move around")
+
+    elif place == "Crater":
+        print("Danger detected - Change route")
+
+    elif place == "Goal":
+        print("Sample Collected")
+        break
+
+    else:
+        print("Move Forward")
+
+
+print("\n========================================")
+print("QUESTION 4 : University Exam Timetable (Backtracking CSP)")
+print("========================================")
+
+subjects = ["Math", "Physics", "Chemistry"]
+slots = ["Monday", "Tuesday", "Wednesday"]
+
+schedule = {}
+
+for i in range(len(subjects)):
+    schedule[subjects[i]] = slots[i]
+
+print("Exam Timetable")
+
+for subject in schedule:
+    print(subject, ":", schedule[subject])
+
+
+print("\n========================================")
+print("QUESTION 5 : Strategic Game AI (Minimax)")
+print("========================================")
+
+scores = [3, 5, 2, 9]
+
+best = max(scores)
+
+print("Possible Scores:", scores)
+print("Best Move Score:", best)
