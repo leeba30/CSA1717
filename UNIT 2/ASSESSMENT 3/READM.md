@@ -6,7 +6,8 @@
 
 **Objective**
 
-To study and implement advanced Artificial Intelligence search and decision-making algorithms such as A* Search Algorithm and Minimax Algorithm with Alpha-Beta Pruning using Python programming. The objective is to analyze optimal path finding, heuristic-based searching, and intelligent decision-making techniques used in real-world AI applications.
+To study and implement advanced Artificial Intelligence search and decision-making algorithms such as A* Search Algorithm and Minimax Algorithm
+with Alpha-Beta Pruning using Python programming. The objective is to analyze optimal path finding, heuristic-based searching, and intelligent decision-making techniques used in real-world AI applications.
 
 **Software Used**
 
@@ -77,5 +78,4 @@ Node 2
 
 **Result**
 
-The Artificial Intelligence algorithms were successfully implemented and tested using Python. The A* Search Algorithm successfully found the optimal path by evaluating heuristic and path costs, while the Minimax Algorithm with Alpha-Beta Pruning successfully performed intelligent decision-making by analyzing game states and reducing unnecessary searches.
-The implementation improved the understanding of heuristic search, optimal path planning, game tree evaluation, and AI-based problem-solving techniques.
+The Artificial Intelligence algorithms were successfully implemented and tested using Python. The A* Search Algorithm successfully found the optimal path by evaluating heuristic and path costs, while the Minimax Algorithm with Alpha-Beta Pruning successfully performed intelligent decision-making by analyzing game states and reducing unnecessary searches.The implementation improved the understanding of heuristic search, optimal path planning, game tree evaluation, and AI-based problem-solving techniques.
