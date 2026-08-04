@@ -17,15 +17,16 @@ Python 3.13
 Python IDLE
 
 **AI Techniques / Algorithms Used**
-A* Search Algorithm
-Heuristic Search
-Cost Function Evaluation
-Open List and Closed List Management
-Minimax Algorithm
-Alpha-Beta Pruning
-Game Tree Search
-Intelligent Decision Making
-Problems Implemented
+
+A* Search Algorithm,
+Heuristic Search,
+Cost Function Evaluation,
+Open List and Closed List Management,
+Minimax Algorithm,
+Alpha-Beta Pruning,
+Game Tree Search,
+Intelligent Decision Making,
+Problems Implemented,
 
 **1. Optimal Path Finding using A Search Algorithm***
 
