@@ -1,0 +1,267 @@
+import heapq
+
+
+# ==============================
+# QUESTION 1 : A* SEARCH
+# ==============================
+
+graph = {
+    'A': [('B', 2), ('C', 4)],
+    'B': [('A', 2), ('C', 3), ('D', 7), ('E', 2)],
+    'C': [('A', 4), ('B', 3), ('E', 3)],
+    'D': [('B', 7), ('E', 2), ('G', 2)],
+    'E': [('B', 2), ('C', 3), ('D', 2)],
+    'G': []
+}
+
+heuristic = {
+    'A': 7,
+    'B': 6,
+    'C': 4,
+    'D': 3,
+    'E': 2,
+    'G': 0
+}
+
+
+def a_star(start, goal):
+
+    print("\n==============================")
+    print(" A* SEARCH ALGORITHM")
+    print("==============================")
+
+    open_list = []
+    heapq.heappush(open_list, (heuristic[start], 0, start))
+
+    g_cost = {start: 0}
+    parent = {}
+    closed_list = []
+
+    iteration = 1
+
+    while open_list:
+
+        f, g, current = heapq.heappop(open_list)
+
+        if current in closed_list:
+            continue
+
+        print("\nIteration :", iteration)
+        print("------------------------------")
+
+        print("Current Node :", current)
+
+        closed_list.append(current)
+
+        print("Closed List :", closed_list)
+
+
+        if current == goal:
+
+            path = []
+
+            while current != start:
+                path.append(current)
+                current = parent[current]
+
+            path.append(start)
+            path.reverse()
+
+            print("\nGoal Reached")
+            print("Optimal Path :", " -> ".join(path))
+            print("Total Cost :", g_cost[goal])
+
+            break
+
+
+        for neighbour, cost in graph[current]:
+
+            new_g = g + cost
+
+            if neighbour not in g_cost or new_g < g_cost[neighbour]:
+
+                g_cost[neighbour] = new_g
+
+                parent[neighbour] = current
+
+                new_f = new_g + heuristic[neighbour]
+
+                heapq.heappush(
+                    open_list,
+                    (new_f, new_g, neighbour)
+                )
+
+
+        print("\nOpen List:")
+        print("Node\tg(n)\th(n)\tf(n)")
+
+        temp = sorted(open_list)
+
+        for f1, g1, node in temp:
+            print(node, "\t", g1, "\t",
+                  heuristic[node], "\t", f1)
+
+        iteration += 1
+
+
+
+# Run A*
+a_star('A', 'G')
+
+
+
+
+
+# ==============================
+# QUESTION 2 : MINIMAX
+# WITH ALPHA-BETA PRUNING
+# ==============================
+
+
+def minimax(node, depth, maximizingPlayer, alpha, beta):
+
+
+    if depth == 0:
+
+        print("Leaf Node :", node)
+
+        return node
+
+
+
+    if maximizingPlayer:
+
+
+        max_value = -9999
+
+        print("\nMAX Node")
+        print("Alpha =", alpha, "Beta =", beta)
+
+
+
+        for child in node:
+
+
+            value = minimax(
+                child,
+                depth-1,
+                False,
+                alpha,
+                beta
+            )
+
+
+            max_value = max(max_value, value)
+
+            alpha = max(alpha, max_value)
+
+
+            print("Selected Value =", max_value)
+            print("Alpha =", alpha,
+                  "Beta =", beta)
+
+
+
+            if beta <= alpha:
+
+                print("Pruning occurs")
+
+                break
+
+
+
+        return max_value
+
+
+
+    else:
+
+
+        min_value = 9999
+
+
+        print("\nMIN Node")
+        print("Alpha =", alpha,
+              "Beta =", beta)
+
+
+
+        for child in node:
+
+
+            value = minimax(
+                child,
+                depth-1,
+                True,
+                alpha,
+                beta
+            )
+
+
+            min_value = min(min_value, value)
+
+
+            beta = min(beta, min_value)
+
+
+            print("Selected Value =", min_value)
+
+            print("Alpha =", alpha,
+                  "Beta =", beta)
+
+
+
+            if beta <= alpha:
+
+                print("Pruning occurs")
+
+                break
+
+
+
+        return min_value
+
+
+
+
+# Game Tree
+
+#              MAX
+#            /     \
+#          MIN     MIN
+#        / | \    / | \
+#       3  5  6  9  1  2
+
+
+left_MIN = [3, 5, 6]
+
+right_MIN = [9, 1, 2]
+
+
+root = [left_MIN, right_MIN]
+
+
+
+print("\n\n==============================")
+print(" MINIMAX WITH ALPHA-BETA PRUNING")
+print("==============================")
+
+
+result = minimax(
+    root,
+    2,
+    True,
+    -9999,
+    9999
+)
+
+
+
+print("\n------------------------------")
+print("Final Minimax Value =", result)
+
+
+if result == 3:
+    print("Best Move = Left MIN Branch")
+else:
+    print("Best Move = Right MIN Branch")
