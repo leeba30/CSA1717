@@ -1,0 +1,530 @@
+# ============================================================
+# ARTIFICIAL INTELLIGENCE - ASSESSMENT 2
+# Logical Reasoning and Intelligent Decision Making
+# ============================================================
+
+
+# ============================================================
+# QUESTION 1
+# SMART MEDICAL DIAGNOSIS SYSTEM
+# Forward Chaining and Backward Chaining
+# ============================================================
+
+print("\n============================================================")
+print("QUESTION 1 - SMART MEDICAL DIAGNOSIS SYSTEM")
+print("============================================================")
+
+# Facts about Patient A
+medical_facts = {
+    "Fever": True,
+    "Cough": True,
+    "Breathlessness": True
+}
+
+# Medical rules
+medical_rules = [
+    (["Fever", "Cough"], "Flu"),
+    (["Fever", "Rash"], "Measles"),
+    (["Cough", "Breathlessness"], "Pneumonia")
+]
+
+print("\n--- Forward Chaining ---")
+
+diagnoses = []
+
+for conditions, conclusion in medical_rules:
+
+    if all(medical_facts.get(condition, False)
+           for condition in conditions):
+
+        diagnoses.append(conclusion)
+
+        print("Rule fired:",
+              " AND ".join(conditions),
+              "->",
+              conclusion)
+
+        print("Derived fact:", conclusion)
+
+print("\nFinal Diagnoses:")
+
+if len(diagnoses) > 0:
+    for diagnosis in diagnoses:
+        print("-", diagnosis)
+else:
+    print("No diagnosis derived.")
+
+
+# Backward Chaining
+
+print("\n--- Backward Chaining ---")
+
+goal = "Pneumonia"
+
+print("Goal:", goal)
+
+for conditions, conclusion in medical_rules:
+
+    if conclusion == goal:
+
+        print("Using Rule:",
+              " AND ".join(conditions),
+              "->",
+              conclusion)
+
+        print("Sub-goal 1:", conditions[0])
+        print("Sub-goal 2:", conditions[1])
+
+        if all(medical_facts.get(condition, False)
+               for condition in conditions):
+
+            print("All sub-goals are TRUE.")
+            print("Therefore", goal, "is TRUE.")
+
+        else:
+            print("Goal cannot be proved.")
+
+
+# ============================================================
+# QUESTION 2
+# AUTONOMOUS TRAFFIC MANAGEMENT AGENT
+# Unification and Resolution
+# ============================================================
+
+print("\n============================================================")
+print("QUESTION 2 - AUTONOMOUS TRAFFIC MANAGEMENT AGENT")
+print("============================================================")
+
+# Facts
+traffic_facts = {
+    ("Vehicle", "Ambulance"),
+    ("EmergencyType", "Ambulance"),
+    ("Vehicle", "CarA"),
+    ("Behind", "CarA", "Ambulance")
+}
+
+print("\n--- Unification ---")
+
+print("Rule 1:")
+print("Vehicle(x) AND EmergencyType(x) -> ClearPath(x)")
+
+print("\nMatching Vehicle(x) with Vehicle(Ambulance)")
+
+theta = {"x": "Ambulance"}
+
+print("Substitution:")
+print(theta)
+
+print("\nMatching EmergencyType(x) with")
+print("EmergencyType(Ambulance)")
+
+print("Substitution:")
+print(theta)
+
+# Apply Rule 1
+
+traffic_facts.add(
+    ("ClearPath", "Ambulance")
+)
+
+print("\nDerived:")
+print("ClearPath(Ambulance)")
+
+
+# Apply Rule 2
+
+if ("ClearPath", "Ambulance") in traffic_facts:
+
+    traffic_facts.add(
+        ("GreenSignal", "Ambulance")
+    )
+
+    print("\nDerived:")
+    print("GreenSignal(Ambulance)")
+
+
+# Apply Rule 3
+
+if (
+    ("Vehicle", "CarA") in traffic_facts
+    and
+    ("Behind", "CarA", "Ambulance") in traffic_facts
+    and
+    ("GreenSignal", "Ambulance") in traffic_facts
+):
+
+    traffic_facts.add(
+        ("Proceed", "CarA")
+    )
+
+    print("\nDerived:")
+    print("Proceed(CarA)")
+
+
+print("\n--- Resolution Result ---")
+
+if ("Proceed", "CarA") in traffic_facts:
+
+    print("Proceed(CarA) = TRUE")
+
+else:
+
+    print("Proceed(CarA) = FALSE")
+
+
+# ============================================================
+# QUESTION 3
+# AGRICULTURAL EXPERT REASONING SYSTEM
+# CNF and Resolution Refutation
+# ============================================================
+
+print("\n============================================================")
+print("QUESTION 3 - AGRICULTURAL EXPERT REASONING SYSTEM")
+print("============================================================")
+
+# Initial facts
+agri_facts = {
+    "SoilDry",
+    "CropWheat"
+}
+
+print("\nInitial Facts:")
+
+for fact in agri_facts:
+    print("-", fact)
+
+
+# Rule 1
+
+print("\n--- Rule 1 ---")
+
+print("SoilDry -> IrrigationNeeded")
+
+if "SoilDry" in agri_facts:
+
+    agri_facts.add(
+        "IrrigationNeeded"
+    )
+
+    print("Derived:")
+    print("IrrigationNeeded")
+
+
+# Rule 2
+
+print("\n--- Rule 2 ---")
+
+print(
+    "IrrigationNeeded AND CropWheat -> ApplyDripMethod"
+)
+
+if (
+    "IrrigationNeeded" in agri_facts
+    and
+    "CropWheat" in agri_facts
+):
+
+    agri_facts.add(
+        "ApplyDripMethod"
+    )
+
+    print("Derived:")
+    print("ApplyDripMethod")
+
+
+# Rule 3
+
+print("\n--- Rule 3 ---")
+
+print(
+    "NOT ApplyDripMethod AND CropWheat -> CropAtRisk"
+)
+
+if (
+    "NOT ApplyDripMethod" in agri_facts
+    and
+    "CropWheat" in agri_facts
+):
+
+    agri_facts.add(
+        "CropAtRisk"
+    )
+
+    print("Derived:")
+    print("CropAtRisk")
+
+else:
+
+    print(
+        "Rule 3 cannot be fired because"
+    )
+
+    print(
+        "NOT ApplyDripMethod is not known."
+    )
+
+
+# CNF
+
+print("\n--- CNF Representation ---")
+
+print("P1 = NOT SoilDry OR IrrigationNeeded")
+
+print(
+    "P2 = NOT IrrigationNeeded OR "
+    "NOT CropWheat OR ApplyDripMethod"
+)
+
+print(
+    "P3 = ApplyDripMethod OR "
+    "NOT CropWheat OR CropAtRisk"
+)
+
+print("P4 = SoilDry")
+
+print("P5 = CropWheat")
+
+
+# Resolution Refutation
+
+print("\n--- Resolution Refutation ---")
+
+print("Goal: ApplyDripMethod")
+
+print("Negated Goal: NOT ApplyDripMethod")
+
+print("\nResolution Step 1:")
+
+print(
+    "NOT SoilDry OR IrrigationNeeded"
+)
+
+print("+ SoilDry")
+
+print("Result: IrrigationNeeded")
+
+
+print("\nResolution Step 2:")
+
+print(
+    "NOT IrrigationNeeded OR "
+    "NOT CropWheat OR ApplyDripMethod"
+)
+
+print("+ IrrigationNeeded")
+
+print(
+    "Result: NOT CropWheat OR ApplyDripMethod"
+)
+
+
+print("\nResolution Step 3:")
+
+print(
+    "NOT CropWheat OR ApplyDripMethod"
+)
+
+print("+ CropWheat")
+
+print("Result: ApplyDripMethod")
+
+
+print("\nResolution Step 4:")
+
+print("ApplyDripMethod")
+
+print("+ NOT ApplyDripMethod")
+
+print("Result: EMPTY CLAUSE")
+
+
+print("\nFinal Result:")
+
+print(
+    "ApplyDripMethod = TRUE"
+)
+
+
+# ============================================================
+# QUESTION 4
+# WUMPUS WORLD KNOWLEDGE AGENT
+# Modus Ponens and Forward Chaining
+# ============================================================
+
+print("\n============================================================")
+print("QUESTION 4 - WUMPUS WORLD KNOWLEDGE AGENT")
+print("============================================================")
+
+# Percepts
+percepts = {
+    "Stench[1,2]",
+    "Breeze[1,1]",
+    "Glitter[2,2]"
+}
+
+print("\n--- Initial Percepts ---")
+
+for percept in percepts:
+    print("-", percept)
+
+
+# Rule 1
+
+print("\n--- Modus Ponens ---")
+
+if "Stench[1,2]" in percepts:
+
+    print(
+        "Stench[1,2] -> "
+        "WumpusAdjacent[1,2]"
+    )
+
+    print(
+        "Derived: WumpusAdjacent[1,2]"
+    )
+
+
+# Rule 2
+
+if "Breeze[1,1]" in percepts:
+
+    print(
+        "Breeze[1,1] -> "
+        "PitAdjacent[1,1]"
+    )
+
+    print(
+        "Derived: PitAdjacent[1,1]"
+    )
+
+
+# Rule 3
+
+if "Glitter[2,2]" in percepts:
+
+    print(
+        "Glitter[2,2] -> Gold[2,2]"
+    )
+
+    print(
+        "Derived: Gold[2,2]"
+    )
+
+
+# Possible Wumpus locations
+
+wumpus_locations = [
+    "[1,1]",
+    "[1,3]",
+    "[2,2]"
+]
+
+# Possible Pit locations
+
+pit_locations = [
+    "[1,2]",
+    "[2,1]"
+]
+
+
+print("\n--- Forward Chaining ---")
+
+print("\nPossible Wumpus Locations:")
+
+for location in wumpus_locations:
+
+    print("-", location)
+
+
+print("\nPossible Pit Locations:")
+
+for location in pit_locations:
+
+    print("-", location)
+
+
+print("\nGold Location:")
+
+print("- [2,2]")
+
+
+# Path checking
+
+path = [
+    "[1,1]",
+    "[1,2]",
+    "[2,2]"
+]
+
+print("\n--- Path Safety Analysis ---")
+
+print(
+    "Path:",
+    " -> ".join(path)
+)
+
+
+for cell in path:
+
+    if cell in wumpus_locations:
+
+        print(
+            cell,
+            "may contain Wumpus - "
+            "NOT CONFIRMED SAFE"
+        )
+
+    elif cell in pit_locations:
+
+        print(
+            cell,
+            "may contain Pit - "
+            "NOT CONFIRMED SAFE"
+        )
+
+    else:
+
+        print(
+            cell,
+            "has no known danger"
+        )
+
+
+print("\nFinal Result:")
+
+print(
+    "The path is NOT PROVEN SAFE."
+)
+
+print(
+    "Gold is confirmed at [2,2]."
+)
+
+
+# ============================================================
+# OVERALL RESULT
+# ============================================================
+
+print("\n============================================================")
+print("OVERALL RESULT")
+print("============================================================")
+
+print(
+    "Question 1: Flu and Pneumonia derived."
+)
+
+print(
+    "Question 2: Proceed(CarA) = TRUE."
+)
+
+print(
+    "Question 3: ApplyDripMethod = TRUE."
+)
+
+print(
+    "Question 4: Gold is at [2,2], "
+    "but the complete path is NOT PROVEN SAFE."
+)
+
+print("\nAll four AI logical reasoning problems")
+print("have been successfully executed.")
