@@ -1,6 +1,7 @@
-# Artificial Intelligence – Assessment 2
-# Logical Reasoning and Automated Theorem Proving
-# Using Resolution Algorithm
+# ============================================================
+# ARTIFICIAL INTELLIGENCE - ASSESSMENT 2
+# LOGICAL REASONING USING RESOLUTION ALGORITHM
+# ============================================================
 #
 # Problems:
 # 1. Rain and Wet Ground
@@ -8,25 +9,28 @@
 # 3. Library Membership
 # 4. Placement Eligibility
 # 5. Access Control System
+#
+# ============================================================
 
 
-# ---------------------------------------------------------
+# ------------------------------------------------------------
 # RESOLUTION FUNCTION
-# ---------------------------------------------------------
+# ------------------------------------------------------------
 
 def resolve(clause1, clause2):
+
     for literal in clause1:
 
-        # Find the opposite literal
-        if literal.startswith("¬"):
-            opposite = literal[1:]
+        # Find complementary literal
+        if literal.startswith("NOT_"):
+            opposite = literal[4:]
         else:
-            opposite = "¬" + literal
+            opposite = "NOT_" + literal
 
-        # If opposite literal exists in the second clause
+        # Check whether complementary literal is present
         if opposite in clause2:
 
-            # Remove the complementary literals
+            # Remove complementary literals
             new_clause = (clause1 - {literal}) | \
                          (clause2 - {opposite})
 
@@ -35,14 +39,14 @@ def resolve(clause1, clause2):
     return None
 
 
-# ---------------------------------------------------------
+# ============================================================
 # QUESTION 1
 # RAIN AND WET GROUND
-# ---------------------------------------------------------
+# ============================================================
 
-print("=" * 60)
+print("\n" + "=" * 65)
 print("QUESTION 1 - RAIN AND WET GROUND")
-print("=" * 60)
+print("=" * 65)
 
 print("\nKnowledge Base:")
 print("1. If it rains, then the ground becomes wet.")
@@ -53,45 +57,45 @@ print("R -> W")
 print("R")
 
 print("\nGoal: W")
-print("Negated Goal: ¬W")
+print("Negated Goal: NOT_W")
 
-# CNF
-C1 = {"¬R", "W"}
-C2 = {"R"}
-C3 = {"¬W"}
+# CNF Clauses
+Q1_C1 = {"NOT_R", "W"}
+Q1_C2 = {"R"}
+Q1_C3 = {"NOT_W"}
 
 print("\nCNF Clauses:")
-print("C1 =", C1)
-print("C2 =", C2)
-print("C3 =", C3)
+print("C1 =", Q1_C1)
+print("C2 =", Q1_C2)
+print("C3 =", Q1_C3)
 
 # Resolution Step 1
-C4 = resolve(C1, C2)
+Q1_C4 = resolve(Q1_C1, Q1_C2)
 
 print("\nResolution Step 1:")
-print(C1, "+", C2, "=>", C4)
+print(Q1_C1, "+", Q1_C2, "=>", Q1_C4)
 
 # Resolution Step 2
-C5 = resolve(C4, C3)
+Q1_C5 = resolve(Q1_C4, Q1_C3)
 
 print("\nResolution Step 2:")
-print(C4, "+", C3, "=>", C5)
+print(Q1_C4, "+", Q1_C3, "=>", Q1_C5)
 
-if len(C5) == 0:
-    print("\nEmpty Clause (□) obtained.")
+if len(Q1_C5) == 0:
+    print("\nEmpty Clause obtained: {}")
     print("Conclusion: Ground is wet. GOAL PROVED.")
 else:
     print("\nGoal cannot be proved.")
 
 
-# ---------------------------------------------------------
+# ============================================================
 # QUESTION 2
 # STUDENT ASSIGNMENT SUBMISSION
-# ---------------------------------------------------------
+# ============================================================
 
-print("\n" + "=" * 60)
+print("\n" + "=" * 65)
 print("QUESTION 2 - STUDENT ASSIGNMENT SUBMISSION")
-print("=" * 60)
+print("=" * 65)
 
 print("\nKnowledge Base:")
 print("1. If a student submits the assignment, then the student")
@@ -103,45 +107,45 @@ print("S -> M")
 print("S")
 
 print("\nGoal: M")
-print("Negated Goal: ¬M")
+print("Negated Goal: NOT_M")
 
-# CNF
-C1 = {"¬S", "M"}
-C2 = {"S"}
-C3 = {"¬M"}
+# CNF Clauses
+Q2_C1 = {"NOT_S", "M"}
+Q2_C2 = {"S"}
+Q2_C3 = {"NOT_M"}
 
 print("\nCNF Clauses:")
-print("C1 =", C1)
-print("C2 =", C2)
-print("C3 =", C3)
+print("C1 =", Q2_C1)
+print("C2 =", Q2_C2)
+print("C3 =", Q2_C3)
 
 # Resolution Step 1
-C4 = resolve(C1, C2)
+Q2_C4 = resolve(Q2_C1, Q2_C2)
 
 print("\nResolution Step 1:")
-print(C1, "+", C2, "=>", C4)
+print(Q2_C1, "+", Q2_C2, "=>", Q2_C4)
 
 # Resolution Step 2
-C5 = resolve(C4, C3)
+Q2_C5 = resolve(Q2_C4, Q2_C3)
 
 print("\nResolution Step 2:")
-print(C4, "+", C3, "=>", C5)
+print(Q2_C4, "+", Q2_C3, "=>", Q2_C5)
 
-if len(C5) == 0:
-    print("\nEmpty Clause (□) obtained.")
+if len(Q2_C5) == 0:
+    print("\nEmpty Clause obtained: {}")
     print("Conclusion: Rahul receives internal marks. GOAL PROVED.")
 else:
     print("\nGoal cannot be proved.")
 
 
-# ---------------------------------------------------------
+# ============================================================
 # QUESTION 3
 # LIBRARY MEMBERSHIP
-# ---------------------------------------------------------
+# ============================================================
 
-print("\n" + "=" * 60)
+print("\n" + "=" * 65)
 print("QUESTION 3 - LIBRARY MEMBERSHIP")
-print("=" * 60)
+print("=" * 65)
 
 print("\nKnowledge Base:")
 print("1. If a person is a library member, then the person")
@@ -153,45 +157,45 @@ print("L -> B")
 print("L")
 
 print("\nGoal: B")
-print("Negated Goal: ¬B")
+print("Negated Goal: NOT_B")
 
-# CNF
-C1 = {"¬L", "B"}
-C2 = {"L"}
-C3 = {"¬B"}
+# CNF Clauses
+Q3_C1 = {"NOT_L", "B"}
+Q3_C2 = {"L"}
+Q3_C3 = {"NOT_B"}
 
 print("\nCNF Clauses:")
-print("C1 =", C1)
-print("C2 =", C2)
-print("C3 =", C3)
+print("C1 =", Q3_C1)
+print("C2 =", Q3_C2)
+print("C3 =", Q3_C3)
 
 # Resolution Step 1
-C4 = resolve(C1, C2)
+Q3_C4 = resolve(Q3_C1, Q3_C2)
 
 print("\nResolution Step 1:")
-print(C1, "+", C2, "=>", C4)
+print(Q3_C1, "+", Q3_C2, "=>", Q3_C4)
 
 # Resolution Step 2
-C5 = resolve(C4, C3)
+Q3_C5 = resolve(Q3_C4, Q3_C3)
 
 print("\nResolution Step 2:")
-print(C4, "+", C3, "=>", C5)
+print(Q3_C4, "+", Q3_C3, "=>", Q3_C5)
 
-if len(C5) == 0:
-    print("\nEmpty Clause (□) obtained.")
+if len(Q3_C5) == 0:
+    print("\nEmpty Clause obtained: {}")
     print("Conclusion: Priya can borrow books. GOAL PROVED.")
 else:
     print("\nGoal cannot be proved.")
 
 
-# ---------------------------------------------------------
+# ============================================================
 # QUESTION 4
 # PLACEMENT ELIGIBILITY
-# ---------------------------------------------------------
+# ============================================================
 
-print("\n" + "=" * 60)
+print("\n" + "=" * 65)
 print("QUESTION 4 - PLACEMENT ELIGIBILITY")
-print("=" * 60)
+print("=" * 65)
 
 print("\nKnowledge Base:")
 print("1. If a student clears the aptitude test, then the student")
@@ -203,45 +207,45 @@ print("A -> E")
 print("A")
 
 print("\nGoal: E")
-print("Negated Goal: ¬E")
+print("Negated Goal: NOT_E")
 
-# CNF
-C1 = {"¬A", "E"}
-C2 = {"A"}
-C3 = {"¬E"}
+# CNF Clauses
+Q4_C1 = {"NOT_A", "E"}
+Q4_C2 = {"A"}
+Q4_C3 = {"NOT_E"}
 
 print("\nCNF Clauses:")
-print("C1 =", C1)
-print("C2 =", C2)
-print("C3 =", C3)
+print("C1 =", Q4_C1)
+print("C2 =", Q4_C2)
+print("C3 =", Q4_C3)
 
 # Resolution Step 1
-C4 = resolve(C1, C2)
+Q4_C4 = resolve(Q4_C1, Q4_C2)
 
 print("\nResolution Step 1:")
-print(C1, "+", C2, "=>", C4)
+print(Q4_C1, "+", Q4_C2, "=>", Q4_C4)
 
 # Resolution Step 2
-C5 = resolve(C4, C3)
+Q4_C5 = resolve(Q4_C4, Q4_C3)
 
 print("\nResolution Step 2:")
-print(C4, "+", C3, "=>", C5)
+print(Q4_C4, "+", Q4_C3, "=>", Q4_C5)
 
-if len(C5) == 0:
-    print("\nEmpty Clause (□) obtained.")
+if len(Q4_C5) == 0:
+    print("\nEmpty Clause obtained: {}")
     print("Conclusion: Arun is eligible for placement. GOAL PROVED.")
 else:
     print("\nGoal cannot be proved.")
 
 
-# ---------------------------------------------------------
+# ============================================================
 # QUESTION 5
 # ACCESS CONTROL SYSTEM
-# ---------------------------------------------------------
+# ============================================================
 
-print("\n" + "=" * 60)
+print("\n" + "=" * 65)
 print("QUESTION 5 - ACCESS CONTROL SYSTEM")
-print("=" * 60)
+print("=" * 65)
 
 print("\nKnowledge Base:")
 print("1. If a user enters the correct password, then the user")
@@ -255,68 +259,60 @@ print("A -> G")
 print("P")
 
 print("\nGoal: G")
-print("Negated Goal: ¬G")
+print("Negated Goal: NOT_G")
 
-# CNF
-C1 = {"¬P", "A"}
-C2 = {"¬A", "G"}
-C3 = {"P"}
-C4 = {"¬G"}
+# CNF Clauses
+Q5_C1 = {"NOT_P", "A"}
+Q5_C2 = {"NOT_A", "G"}
+Q5_C3 = {"P"}
+Q5_C4 = {"NOT_G"}
 
 print("\nCNF Clauses:")
-print("C1 =", C1)
-print("C2 =", C2)
-print("C3 =", C3)
-print("C4 =", C4)
+print("C1 =", Q5_C1)
+print("C2 =", Q5_C2)
+print("C3 =", Q5_C3)
+print("C4 =", Q5_C4)
 
 # Resolution Step 1
-C5 = resolve(C1, C3)
+Q5_C5 = resolve(Q5_C1, Q5_C3)
 
 print("\nResolution Step 1:")
-print(C1, "+", C3, "=>", C5)
+print(Q5_C1, "+", Q5_C3, "=>", Q5_C5)
 
 # Resolution Step 2
-C6 = resolve(C2, C5)
+Q5_C6 = resolve(Q5_C2, Q5_C5)
 
 print("\nResolution Step 2:")
-print(C2, "+", C5, "=>", C6)
+print(Q5_C2, "+", Q5_C5, "=>", Q5_C6)
 
 # Resolution Step 3
-C7 = resolve(C6, C4)
+Q5_C7 = resolve(Q5_C6, Q5_C4)
 
 print("\nResolution Step 3:")
-print(C6, "+", C4, "=>", C7)
+print(Q5_C6, "+", Q5_C4, "=>", Q5_C7)
 
-if len(C7) == 0:
-    print("\nEmpty Clause (□) obtained.")
+if len(Q5_C7) == 0:
+    print("\nEmpty Clause obtained: {}")
     print("Conclusion: User is granted access. GOAL PROVED.")
 else:
     print("\nGoal cannot be proved.")
 
 
-# ---------------------------------------------------------
-# FINAL RESULT
-# ---------------------------------------------------------
+# ============================================================
+# FINAL RESULTS
+# ============================================================
 
-print("\n" + "=" * 60)
-print("FINAL RESULT")
-print("=" * 60)
+print("\n" + "=" * 65)
+print("FINAL RESULTS")
+print("=" * 65)
 
-print("\n1. Rain and Wet Ground")
-print("   Result: Ground is wet - PROVED")
-
-print("\n2. Student Assignment Submission")
-print("   Result: Rahul receives internal marks - PROVED")
-
-print("\n3. Library Membership")
-print("   Result: Priya can borrow books - PROVED")
-
-print("\n4. Placement Eligibility")
-print("   Result: Arun is eligible for placement - PROVED")
-
-print("\n5. Access Control System")
-print("   Result: User is granted access - PROVED")
+print("\nQuestion 1: Ground is wet - PROVED")
+print("Question 2: Rahul receives internal marks - PROVED")
+print("Question 3: Priya can borrow books - PROVED")
+print("Question 4: Arun is eligible for placement - PROVED")
+print("Question 5: User is granted access - PROVED")
 
 print("\nAll five problems were successfully solved")
 print("using the Resolution Algorithm.")
-print("=" * 60)
+
+print("=" * 65)
