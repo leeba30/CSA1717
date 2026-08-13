@@ -1,8 +1,7 @@
-# ============================================================
+
 # ARTIFICIAL INTELLIGENCE - ASSESSMENT 2
 # LOGICAL REASONING USING RESOLUTION ALGORITHM
-# ============================================================
-#
+
 # Problems:
 # 1. Rain and Wet Ground
 # 2. Student Assignment Submission
