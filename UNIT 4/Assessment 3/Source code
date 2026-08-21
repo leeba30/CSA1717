@@ -1,0 +1,834 @@
+# ============================================================
+# ARTIFICIAL INTELLIGENCE ASSESSMENT
+# DECISION TREE CLASSIFICATION AND Q-LEARNING
+# ============================================================
+
+
+# ============================================================
+# EXPERIMENT 1: DECISION TREE CLASSIFICATION
+# ============================================================
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import random
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import plot_tree
+from sklearn.tree import export_text
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+
+
+print("============================================================")
+print("EXPERIMENT 1: DECISION TREE CLASSIFICATION")
+print("============================================================")
+
+
+# ------------------------------------------------------------
+# LOAD IRIS DATASET
+# ------------------------------------------------------------
+
+iris = load_iris()
+
+X = pd.DataFrame(
+    iris.data,
+    columns=iris.feature_names
+)
+
+y = pd.Series(
+    iris.target,
+    name="target"
+)
+
+
+# ------------------------------------------------------------
+# DISPLAY FIRST 5 ROWS
+# ------------------------------------------------------------
+
+print("\nFIRST 5 ROWS:")
+print(X.head())
+
+
+# ------------------------------------------------------------
+# DISPLAY DATA TYPES
+# ------------------------------------------------------------
+
+print("\nDATA TYPES:")
+print(X.dtypes)
+
+
+# ------------------------------------------------------------
+# CHECK MISSING VALUES
+# ------------------------------------------------------------
+
+print("\nMISSING VALUES:")
+print(X.isnull().sum())
+
+
+# ------------------------------------------------------------
+# DISPLAY TARGET CLASSES
+# ------------------------------------------------------------
+
+print("\nTARGET CLASSES:")
+print(iris.target_names)
+
+
+# ------------------------------------------------------------
+# SPLIT DATASET
+# ------------------------------------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+
+print("\nTRAINING DATA SIZE:")
+print(X_train.shape)
+
+print("\nTESTING DATA SIZE:")
+print(X_test.shape)
+
+
+# ------------------------------------------------------------
+# CREATE DECISION TREE USING GINI INDEX
+# ------------------------------------------------------------
+
+model = DecisionTreeClassifier(
+    criterion="gini",
+    random_state=42
+)
+
+
+# Train the model
+model.fit(X_train, y_train)
+
+
+# ------------------------------------------------------------
+# DISPLAY TREE STRUCTURE
+# ------------------------------------------------------------
+
+print("\nDECISION TREE STRUCTURE:")
+
+print(
+    export_text(
+        model,
+        feature_names=list(X.columns)
+    )
+)
+
+
+# ------------------------------------------------------------
+# IDENTIFY ROOT NODE
+# ------------------------------------------------------------
+
+root_index = model.tree_.feature[0]
+
+root_feature = X.columns[root_index]
+
+root_threshold = model.tree_.threshold[0]
+
+print("\nROOT NODE:")
+
+print("Feature:", root_feature)
+
+print("Threshold:", round(root_threshold, 2))
+
+print("\nROOT NODE JUSTIFICATION:")
+
+print(
+    "The root node is selected because it provides "
+    "the best impurity reduction using the Gini Index."
+)
+
+
+# ------------------------------------------------------------
+# DISPLAY DECISION TREE
+# ------------------------------------------------------------
+
+plt.figure(figsize=(15, 8))
+
+plot_tree(
+    model,
+    feature_names=iris.feature_names,
+    class_names=iris.target_names,
+    filled=True
+)
+
+plt.title("Decision Tree - Iris Dataset")
+
+plt.show()
+
+
+# ------------------------------------------------------------
+# PREDICT TEST DATA
+# ------------------------------------------------------------
+
+y_pred = model.predict(X_test)
+
+
+# ------------------------------------------------------------
+# ACCURACY
+# ------------------------------------------------------------
+
+accuracy = accuracy_score(
+    y_test,
+    y_pred
+)
+
+print("\nACCURACY:")
+
+print(
+    round(accuracy * 100, 2),
+    "%"
+)
+
+
+# ------------------------------------------------------------
+# CONFUSION MATRIX
+# ------------------------------------------------------------
+
+print("\nCONFUSION MATRIX:")
+
+print(
+    confusion_matrix(
+        y_test,
+        y_pred
+    )
+)
+
+
+# ------------------------------------------------------------
+# CLASSIFICATION REPORT
+# ------------------------------------------------------------
+
+print("\nCLASSIFICATION REPORT:")
+
+print(
+    classification_report(
+        y_test,
+        y_pred,
+        target_names=iris.target_names
+    )
+)
+
+
+# ------------------------------------------------------------
+# MISCLASSIFIED INSTANCES
+# ------------------------------------------------------------
+
+print("\nMISCLASSIFIED INSTANCES:")
+
+misclassified = X_test[
+    y_test != y_pred
+].copy()
+
+
+misclassified["Actual"] = [
+    iris.target_names[i]
+    for i in y_test[y_test != y_pred]
+]
+
+
+misclassified["Predicted"] = [
+    iris.target_names[i]
+    for i in y_pred[y_test != y_pred]
+]
+
+
+if len(misclassified) == 0:
+
+    print("No misclassified instances found.")
+
+else:
+
+    print(misclassified)
+
+    print(
+        "\nNumber of misclassified instances:",
+        len(misclassified)
+    )
+
+
+# ============================================================
+# EXPERIMENT 2: Q-LEARNING
+# ============================================================
+
+print("\n\n============================================================")
+print("EXPERIMENT 2: REINFORCEMENT LEARNING - Q-LEARNING")
+print("============================================================")
+
+
+# ------------------------------------------------------------
+# DEFINE GRID WORLD
+# ------------------------------------------------------------
+
+ROWS = 4
+
+COLS = 4
+
+NUM_STATES = 16
+
+NUM_ACTIONS = 4
+
+
+# Start and goal
+START = 0
+
+GOAL = 15
+
+
+# Obstacles
+OBSTACLES = {5, 10}
+
+
+# Actions
+ACTIONS = [
+    "Up",
+    "Down",
+    "Left",
+    "Right"
+]
+
+
+# ------------------------------------------------------------
+# HYPERPARAMETERS
+# ------------------------------------------------------------
+
+alpha = 0.1
+
+gamma = 0.9
+
+epsilon = 0.2
+
+episodes = 100
+
+
+print("\nHYPERPARAMETERS:")
+
+print(
+    "Learning Rate (alpha) =",
+    alpha
+)
+
+print(
+    "Discount Factor (gamma) =",
+    gamma
+)
+
+print(
+    "Exploration Rate (epsilon) =",
+    epsilon
+)
+
+print(
+    "Number of Episodes =",
+    episodes
+)
+
+
+# ------------------------------------------------------------
+# INITIALIZE Q-TABLE
+# ------------------------------------------------------------
+
+Q = np.zeros(
+    (
+        NUM_STATES,
+        NUM_ACTIONS
+    )
+)
+
+
+print("\nINITIAL Q-TABLE:")
+
+print(Q)
+
+
+# ------------------------------------------------------------
+# CONVERT STATE TO POSITION
+# ------------------------------------------------------------
+
+def get_position(state):
+
+    row = state // COLS
+
+    col = state % COLS
+
+    return row, col
+
+
+# ------------------------------------------------------------
+# ENVIRONMENT STEP FUNCTION
+# ------------------------------------------------------------
+
+def step(state, action):
+
+    row, col = get_position(state)
+
+    new_row = row
+
+    new_col = col
+
+
+    # Up
+    if action == 0:
+
+        new_row -= 1
+
+
+    # Down
+    elif action == 1:
+
+        new_row += 1
+
+
+    # Left
+    elif action == 2:
+
+        new_col -= 1
+
+
+    # Right
+    elif action == 3:
+
+        new_col += 1
+
+
+    # Outside the grid
+    if (
+        new_row < 0
+        or new_row >= ROWS
+        or new_col < 0
+        or new_col >= COLS
+    ):
+
+        return state, -5, False
+
+
+    # Calculate next state
+    next_state = (
+        new_row * COLS
+        + new_col
+    )
+
+
+    # Goal
+    if next_state == GOAL:
+
+        return next_state, 10, True
+
+
+    # Obstacle
+    if next_state in OBSTACLES:
+
+        return next_state, -5, False
+
+
+    # Normal step
+    return next_state, -1, False
+
+
+# ------------------------------------------------------------
+# STORE REWARDS
+# ------------------------------------------------------------
+
+episode_rewards = []
+
+
+# Store Q-table at Episodes 1, 50 and 100
+
+q_episode_1 = None
+
+q_episode_50 = None
+
+q_episode_100 = None
+
+
+# ------------------------------------------------------------
+# Q-LEARNING ALGORITHM
+# ------------------------------------------------------------
+
+for episode in range(
+    1,
+    episodes + 1
+):
+
+    state = START
+
+    total_reward = 0
+
+
+    for step_count in range(100):
+
+
+        # Epsilon-greedy action selection
+
+        if random.random() < epsilon:
+
+            action = random.randint(
+                0,
+                NUM_ACTIONS - 1
+            )
+
+        else:
+
+            action = np.argmax(
+                Q[state]
+            )
+
+
+        # Perform action
+
+        next_state, reward, done = step(
+            state,
+            action
+        )
+
+
+        # Q-Learning update
+
+        Q[state, action] = (
+            Q[state, action]
+            + alpha * (
+                reward
+                + gamma * np.max(
+                    Q[next_state]
+                )
+                - Q[state, action]
+            )
+        )
+
+
+        # Add reward
+
+        total_reward += reward
+
+
+        # Move to next state
+
+        state = next_state
+
+
+        # Stop when goal is reached
+
+        if done:
+
+            break
+
+
+    # Store episode reward
+
+    episode_rewards.append(
+        total_reward
+    )
+
+
+    # Record Q-table
+
+    if episode == 1:
+
+        q_episode_1 = Q.copy()
+
+
+    elif episode == 50:
+
+        q_episode_50 = Q.copy()
+
+
+    elif episode == 100:
+
+        q_episode_100 = Q.copy()
+
+
+# ------------------------------------------------------------
+# Q-VALUES FOR STATE 0
+# ------------------------------------------------------------
+
+print("\n========================================")
+
+print("Q-VALUES FOR STATE 0")
+
+print("========================================")
+
+print(
+    "Actions:",
+    ACTIONS
+)
+
+
+print("\nEpisode 1:")
+
+print(
+    q_episode_1[0]
+)
+
+
+print("\nEpisode 50:")
+
+print(
+    q_episode_50[0]
+)
+
+
+print("\nEpisode 100:")
+
+print(
+    q_episode_100[0]
+)
+
+
+# ------------------------------------------------------------
+# Q-VALUES FOR STATE 6
+# ------------------------------------------------------------
+
+print("\n========================================")
+
+print("Q-VALUES FOR STATE 6")
+
+print("========================================")
+
+print(
+    "Actions:",
+    ACTIONS
+)
+
+
+print("\nEpisode 1:")
+
+print(
+    q_episode_1[6]
+)
+
+
+print("\nEpisode 50:")
+
+print(
+    q_episode_50[6]
+)
+
+
+print("\nEpisode 100:")
+
+print(
+    q_episode_100[6]
+)
+
+
+# ------------------------------------------------------------
+# FINAL Q-TABLE
+# ------------------------------------------------------------
+
+print("\n========================================")
+
+print("FINAL Q-TABLE")
+
+print("========================================")
+
+print(Q)
+
+
+# ------------------------------------------------------------
+# FINAL LEARNED POLICY
+# ------------------------------------------------------------
+
+print("\n========================================")
+
+print("FINAL LEARNED POLICY")
+
+print("========================================")
+
+
+for row in range(ROWS):
+
+    for col in range(COLS):
+
+        state = (
+            row * COLS
+            + col
+        )
+
+
+        # Goal
+
+        if state == GOAL:
+
+            symbol = "G"
+
+
+        # Obstacle
+
+        elif state in OBSTACLES:
+
+            symbol = "X"
+
+
+        # Normal state
+
+        else:
+
+            action = np.argmax(
+                Q[state]
+            )
+
+
+            if action == 0:
+
+                symbol = "UP"
+
+
+            elif action == 1:
+
+                symbol = "DOWN"
+
+
+            elif action == 2:
+
+                symbol = "LEFT"
+
+
+            else:
+
+                symbol = "RIGHT"
+
+
+        print(
+            symbol,
+            end="     "
+        )
+
+
+    print()
+
+
+# ------------------------------------------------------------
+# POLICY DETAILS
+# ------------------------------------------------------------
+
+print("\nPOLICY DETAILS:")
+
+
+for state in range(
+    NUM_STATES
+):
+
+    if state == GOAL:
+
+        print(
+            "State",
+            state,
+            ": GOAL"
+        )
+
+
+    elif state in OBSTACLES:
+
+        print(
+            "State",
+            state,
+            ": OBSTACLE"
+        )
+
+
+    else:
+
+        action = np.argmax(
+            Q[state]
+        )
+
+
+        print(
+            "State",
+            state,
+            ":",
+            ACTIONS[action],
+            "Q-value =",
+            round(
+                Q[state, action],
+                2
+            )
+        )
+
+
+# ------------------------------------------------------------
+# CUMULATIVE REWARD GRAPH
+# ------------------------------------------------------------
+
+cumulative_reward = np.cumsum(
+    episode_rewards
+)
+
+
+plt.figure(
+    figsize=(10, 5)
+)
+
+
+plt.plot(
+    range(
+        1,
+        episodes + 1
+    ),
+    cumulative_reward
+)
+
+
+plt.xlabel(
+    "Episode"
+)
+
+plt.ylabel(
+    "Cumulative Reward"
+)
+
+plt.title(
+    "Cumulative Reward per Episode"
+)
+
+plt.grid(True)
+
+plt.show()
+
+
+# ------------------------------------------------------------
+# CONVERGENCE ANALYSIS
+# ------------------------------------------------------------
+
+print("\n========================================")
+
+print("CONVERGENCE ANALYSIS")
+
+print("========================================")
+
+
+print("""
+Initially, the agent explores the Grid World randomly,
+so the rewards are generally low or negative.
+
+As the number of episodes increases, the Q-values are
+updated based on the rewards received by the agent.
+
+The agent gradually learns which actions lead toward
+the goal and which actions should be avoided.
+
+After sufficient training, the learned policy becomes
+more stable.
+
+The cumulative reward generally improves as the agent
+learns a better path toward the goal.
+
+Therefore, Q-Learning learns an effective policy through
+repeated interaction with the environment.
+""")
+
+
+print("\n============================================================")
+
+print("BOTH EXPERIMENTS COMPLETED SUCCESSFULLY")
+
+print("============================================================")
